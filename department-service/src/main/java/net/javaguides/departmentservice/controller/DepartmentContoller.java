@@ -1,16 +1,22 @@
 package net.javaguides.departmentservice.controller;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
 
 import net.javaguides.departmentservice.dto.DepartmentDto;
+import net.javaguides.departmentservice.exception.ErrorDetails;
+import net.javaguides.departmentservice.exception.ResourceNotFoundException;
 import net.javaguides.departmentservice.service.DepartmentService;
 
 @RestController
@@ -29,8 +35,7 @@ public class DepartmentContoller {
 	@GetMapping("{departmentCode}")
 	public ResponseEntity<DepartmentDto> getDepartment(@PathVariable String departmentCode){
 		DepartmentDto departmentDto = departmentService.getDepartmentByCode(departmentCode);
-		return new ResponseEntity<DepartmentDto>(departmentDto, HttpStatus.OK);
-		
+		return new ResponseEntity<DepartmentDto>(departmentDto, HttpStatus.OK);	
 	}
 
 }

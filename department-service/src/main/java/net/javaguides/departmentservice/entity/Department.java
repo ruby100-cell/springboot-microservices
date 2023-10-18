@@ -1,6 +1,7 @@
 package net.javaguides.departmentservice.entity;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "departments")
@@ -8,6 +9,7 @@ public class Department {
 	@Id
 	private Long id;
 	private String departmentName;
+	@Indexed(unique = true)
 	private String departmentDescription;
 	private String departmentCode;
 	
