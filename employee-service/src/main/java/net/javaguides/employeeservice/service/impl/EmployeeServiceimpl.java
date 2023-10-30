@@ -3,12 +3,16 @@ package net.javaguides.employeeservice.service.impl;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import net.javaguides.employeeservice.dto.APIResponseDto;
 import net.javaguides.employeeservice.dto.DepartmentDto;
 import net.javaguides.employeeservice.dto.EmployeeDto;
@@ -23,6 +27,8 @@ import net.javaguides.employeeservice.service.EmployeeService;
 @Service
 public class EmployeeServiceimpl implements EmployeeService{
 	
+	private static final Logger Logger = LoggerFactory.getLogger(EmployeeServiceimpl.class);
+	
 	@Autowired
 	private EmployeeRepository employeeRepository;
 	
@@ -32,8 +38,8 @@ public class EmployeeServiceimpl implements EmployeeService{
 //	@Autowired
 //	private RestTemplate restTemplate;
 	
-//	@Autowired
-//	private WebClient webClient;
+	@Autowired
+	private WebClient webClient;
 	
 	@Autowired
 	private APIClient apiClient;
@@ -63,8 +69,13 @@ public class EmployeeServiceimpl implements EmployeeService{
 		return savedEmployeeDto;
 	}
 
+//	@CircuitBreaker(name = "${spring.application.name}", fallbackMethod = "getDefaultDepartment")
+	@Retry(name = "${spring.application.name}", fallbackMethod = "getDefaultDepartment")
 	@Override
 	public APIResponseDto getEmployeeById(Long employeeId) {
+		
+		Logger.info("Inside getEmployeeById() method");
+		
 		Employee employee = employeeRepository.findById(employeeId).orElseThrow(
 				() -> new ResourceNotFoundException("Employee", "EmployeeId", employeeId)
 				);
@@ -72,12 +83,37 @@ public class EmployeeServiceimpl implements EmployeeService{
 //				DepartmentDto.class);
 //		DepartmentDto departmentDto = responseEntity.getBody();
 		
-//		DepartmentDto departmentDto = webClient.get().uri("http://localhost:8080/api/departments/"+ employee.getDepartmentCode()).
-//		retrieve()
-//		.bodyToMono(DepartmentDto.class)
-//		.block();
+		DepartmentDto departmentDto = webClient.get().uri("http://localhost:8080/api/departments/"+ employee.getDepartmentCode()).
+		retrieve()
+		.bodyToMono(DepartmentDto.class)
+		.block();
 		
-		DepartmentDto departmentDto = apiClient.getDepartment(employee.getDepartmentCode());
+//		DepartmentDto departmentDto = apiClient.getDepartment(employee.getDepartmentCode());
+		
+//		EmployeeDto employeeDto = new EmployeeDto(employee.getId(), 
+//				employee.getFirstName(), employee.getLastName(), employee.getEmail());
+		
+//		EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
+		EmployeeDto employeeDto = AutoUserMapper.MAPPER.mapToEmployeeDto(employee);
+		
+		APIResponseDto apiResponseDTO = new APIResponseDto();
+		apiResponseDTO.setDepartmentDto(departmentDto);
+		apiResponseDTO.setEmployeeDto(employeeDto);
+		
+		return apiResponseDTO;
+	}
+	
+	public APIResponseDto getDefaultDepartment(Long employeeId, Exception exception) {
+		Logger.info("Inside getDefaultDepartment() method");
+		Employee employee = employeeRepository.findById(employeeId).orElseThrow(
+				() -> new ResourceNotFoundException("Employee", "EmployeeId", employeeId)
+				);
+		
+		DepartmentDto departmentDto = new DepartmentDto();
+//		departmentDto.setId(100);
+		departmentDto.setDepartmentName("R&D Department");
+		departmentDto.setDepartmentCode("RD001");
+		departmentDto.setDepartmentDescription("Research & Development Department");
 		
 //		EmployeeDto employeeDto = new EmployeeDto(employee.getId(), 
 //				employee.getFirstName(), employee.getLastName(), employee.getEmail());
