@@ -7,19 +7,22 @@ public class EmployeeDto {
 	private String lastName;
 	private String email;
 	private String departmentCode;
+	private String organizationCode;
 	
 	public EmployeeDto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public EmployeeDto(Long id, String firstName, String lastName, String email, String departmentCode) {
+	public EmployeeDto(Long id, String firstName, String lastName, String email, String departmentCode,
+			String organizationCode) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.departmentCode = departmentCode;
+		this.organizationCode = organizationCode;
 	}
 
 	public Long getId() {
@@ -60,6 +63,14 @@ public class EmployeeDto {
 
 	public void setDepartmentCode(String departmentCode) {
 		this.departmentCode = departmentCode;
+	}
+
+	public String getOrganizationCode() {
+		return organizationCode;
+	}
+
+	public void setOrganizationCode(String organizationCode) {
+		this.organizationCode = organizationCode;
 	}
 	
 }

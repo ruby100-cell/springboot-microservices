@@ -11,6 +11,7 @@ import net.javaguides.departmentservice.entity.Department;
 import net.javaguides.departmentservice.exception.DepartmentAlreadyExistException;
 import net.javaguides.departmentservice.exception.ResourceNotFoundException;
 import net.javaguides.departmentservice.mapper.AutoUserMapper;
+import net.javaguides.departmentservice.mapper.DepartmentMapper;
 import net.javaguides.departmentservice.repository.DepartmentRepository;
 import net.javaguides.departmentservice.service.DepartmentService;
 
@@ -34,7 +35,9 @@ public class DepartmentServiceImpl implements DepartmentService{
 			throw new DepartmentAlreadyExistException("Department Already Exists");
 		}
 		
-		Department department = AutoUserMapper.MAPPER.mapToDepartment(departmentDto);
+//		Department department = AutoUserMapper.MAPPER.mapToDepartment(departmentDto);
+		
+		Department department = DepartmentMapper.mapToDepartment(departmentDto);
 		
 		Department savedDepartment = departmentRepository.save(department);
 		
@@ -44,7 +47,9 @@ public class DepartmentServiceImpl implements DepartmentService{
 		
 //		DepartmentDto savedDepartmentDto = modelMapper.map(department, DepartmentDto.class);
 		
-		DepartmentDto savedDepartmentDto = AutoUserMapper.MAPPER.mapToDepartmentDto(savedDepartment);
+//		DepartmentDto savedDepartmentDto = AutoUserMapper.MAPPER.mapToDepartmentDto(savedDepartment);
+		
+		DepartmentDto savedDepartmentDto = DepartmentMapper.mapToDepartmentDto(savedDepartment);
 		return savedDepartmentDto;
 	}
 
@@ -60,7 +65,9 @@ public class DepartmentServiceImpl implements DepartmentService{
 		
 //		DepartmentDto departmentDto = modelMapper.map(department, DepartmentDto.class);
 		
-		DepartmentDto departmentDto = AutoUserMapper.MAPPER.mapToDepartmentDto(department);
+//		DepartmentDto departmentDto = AutoUserMapper.MAPPER.mapToDepartmentDto(department);
+		
+		DepartmentDto departmentDto = DepartmentMapper.mapToDepartmentDto(department);
 		
 		return departmentDto;
 	}

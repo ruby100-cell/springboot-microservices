@@ -2,28 +2,36 @@ package net.javaguides.employeeservice.dto;
 
 public class APIResponseDto {
 	
-	private EmployeeDto employeeDto;
-	private DepartmentDto departmentDto;
+	private EmployeeDto employee;
+	private DepartmentDto department;
+	private OrganizationDto organization;
 	public APIResponseDto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public APIResponseDto(EmployeeDto employeeDto, DepartmentDto departmentDto) {
+	public APIResponseDto(EmployeeDto employee, DepartmentDto department, OrganizationDto organization) {
 		super();
-		this.employeeDto = employeeDto;
-		this.departmentDto = departmentDto;
+		this.employee = employee;
+		this.department = department;
+		this.organization = organization;
 	}
-	public EmployeeDto getEmployeeDto() {
-		return employeeDto;
+	public EmployeeDto getEmployee() {
+		return employee;
 	}
-	public void setEmployeeDto(EmployeeDto employeeDto) {
-		this.employeeDto = employeeDto;
+	public void setEmployee(EmployeeDto employee) {
+		this.employee = employee;
 	}
-	public DepartmentDto getDepartmentDto() {
-		return departmentDto;
+	public DepartmentDto getDepartment() {
+		return department;
 	}
-	public void setDepartmentDto(DepartmentDto departmentDto) {
-		this.departmentDto = departmentDto;
+	public void setDepartment(DepartmentDto department) {
+		this.department = department;
+	}
+	public OrganizationDto getOrganization() {
+		return organization;
+	}
+	public void setOrganization(OrganizationDto organization) {
+		this.organization = organization;
 	}
 	
 }
